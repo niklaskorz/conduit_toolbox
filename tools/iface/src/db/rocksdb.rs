@@ -131,7 +131,10 @@ impl super::SegmentIter for RocksDBCFIter<'_> {
                 .db
                 .rocks
                 .iterator_cf(&self.0.cf(), rocksdb::IteratorMode::Start)
-                .map(|(k, v)| (Vec::from(k), Vec::from(v))),
+                .map(|result| {
+                    let (k, v) = result.unwrap();
+                    (Vec::from(k), Vec::from(v))
+                }),
         )
     }
 }
